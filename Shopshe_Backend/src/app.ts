@@ -1,4 +1,4 @@
-import express from "express";
+ import express from "express";
 
 import userRoute from "./routes/user.js";
 import { connectDB } from "./utility/feature.js";
@@ -27,6 +27,8 @@ app.get("/", (req, res) => {
 app.use("/api/v1/user",userRoute);
 app.use("/api/v1/product",productRoute);
 
+
+app.use("/upload",express.static("upload"))
 // * Error Middle ware
 app.use(errorMiddleWare);
 
