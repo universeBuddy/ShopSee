@@ -17,34 +17,28 @@ export interface NewProductRequestBody {
   stock: number;
 }
 
-
 export type ControllerType = (
   req: Request<any>,
   res: Response,
   next: NextFunction
-) => Promise<void | Response<any, Record<string,any>>>;
-
+) => Promise<void | Response<any, Record<string, any>>>;
 
 export type SearchRequestQuery = {
-
-  search?: string,
-  price?:string,
-  category?: string,
-  sort?:string,
-  page?:string,
+  search?: string;
+  price?: string;
+  category?: string;
+  sort?: string;
+  page?: string;
 };
 
-export interface BaseQuery  {
+export interface BaseQuery {
+  name?: {
+    $regex: string;
+    $options: string;
+  };
+  price?: {
+    $lte: number;
+  };
 
-  name?:{
-    $regex:string,
-    $option:string,
-};
-price?:{
-  $lte:number,
-};
-
-   category?:string;
-
+  category?: string;
 }
-

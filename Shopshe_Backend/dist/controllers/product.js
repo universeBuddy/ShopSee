@@ -105,28 +105,34 @@ export const deleteProduct = TryCatch(async (req, res, next) => {
 export const getAllProducts = TryCatch(async (req, res, next) => {
     const { search, sort, price, category } = req.query;
     const page = Number(req.query.page) || 1;
-    const limit = (await Number(process.env.PRODUCT_PER_PAGE)) || 8;
+    const limit = Number(process.env.PRODUCT_PER_PAGE) || 8;
     const skip = limit * (page - 1);
     const baseQuery = {};
     if (search) {
         baseQuery.name = {
             $regex: search,
-            $option: "i",
+            $options: "i",
         };
     }
-    if (price)
+    if (price) {
         baseQuery.price = {
             $lte: Number(price),
         };
+    }
     if (category)
         baseQuery.category = category;
-    const product = await Product.find({ baseQuery })
+    const productPromise = Product.find(baseQuery)
         .sort(sort && { price: sort === "asc" ? 1 : -1 })
         .limit(limit)
         .skip(skip);
-    const totalPage = Math.floor(product.length / limit);
+    const [product, filteredOnlyProduct] = await Promise.all([
+        productPromise,
+        Product.find(baseQuery),
+    ]);
+    const totalPage = Math.floor(filteredOnlyProduct.length / limit);
     return res.status(200).json({
         success: true,
         product,
+        totalPage,
     });
 });
