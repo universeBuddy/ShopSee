@@ -3,6 +3,7 @@ import { config } from "dotenv";
 import { connectDB } from "./utility/feature.js";
 import { errorMiddleWare } from "./middlewares/error.js";
 import NodeCache from "node-cache";
+import morgan from "morgan";
 import userRoute from "./routes/user.js";
 import productRoute from "./routes/product.js";
 import orderRoute from "./routes/orders.js";
@@ -19,6 +20,8 @@ const app = express();
 export const nodeCache = new NodeCache();
 // * middleware use for json
 app.use(express.json());
+// ! morgen used for moniter the requests
+app.use(morgan("dev"));
 app.get("/", (req, res) => {
     res.status(200).send("API Working");
 });

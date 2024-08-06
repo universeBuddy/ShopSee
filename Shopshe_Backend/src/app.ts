@@ -4,6 +4,7 @@ import { connectDB } from "./utility/feature.js";
 import { error } from "console";
 import { errorMiddleWare } from "./middlewares/error.js";
 import NodeCache from "node-cache";
+import morgan from "morgan";
 
 
 
@@ -22,6 +23,7 @@ console.log(process.env.PORT);
 
 const port = process.env.PORT;
 const mongo_uri  =  process.env.MONGO_URI || "";
+
 connectDB(mongo_uri);
 const app = express();
 
@@ -30,11 +32,11 @@ const app = express();
 export const nodeCache = new NodeCache();
 
 
-
-
-
 // * middleware use for json
 app.use(express.json());
+
+// ! morgen used for moniter the requests
+app.use(morgan("dev"))
 
  
 app.get("/", (req, res) => {
