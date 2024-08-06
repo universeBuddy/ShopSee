@@ -1,9 +1,9 @@
 import mongoose from "mongoose";
 import { nodeCache } from "../app.js";
 import { Product } from "../models/ptoduct.js";
-export const connectDB = () => {
+export const connectDB = (URI) => {
     mongoose
-        .connect("mongodb://localhost:27017", {
+        .connect(URI, {
         dbName: "Shopshe_v1",
     })
         .then((c) => console.log(`MongoDb Connected to ${c.connection.host}`))
