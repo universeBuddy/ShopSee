@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import { nodeCache } from "../app.js";
+import { Product } from "../models/ptoduct.js";
 export const connectDB = () => {
     mongoose
         .connect("mongodb://localhost:27017", {
@@ -8,9 +9,17 @@ export const connectDB = () => {
         .then((c) => console.log(`MongoDb Connected to ${c.connection.host}`))
         .catch((e) => console.log(e));
 };
-export const invalidateCache = ({ product, order, admin, }) => {
+export const invalidateCache = async ({ product, order, admin, }) => {
     if (product) {
-        const productKey = [];
+        const productKey = [
+            "latest-product",
+            "categories",
+            "all-product",
+        ];
+        const product = await Product.find({}).select("_id");
+        product.forEach(i => {
+            productKey.push(`product-${i._id}`);
+        });
         nodeCache.del(productKey);
     }
     if (order) {

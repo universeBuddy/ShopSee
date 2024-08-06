@@ -4,6 +4,7 @@ import ErrorHandler from "../utility/utility-class.js";
 import { rm } from "fs";
 import { faker } from "@faker-js/faker";
 import { nodeCache } from "../app.js";
+import { invalidateCache } from "../utility/feature.js";
 // * Creating a funtion to  create New Product
 export const newProduct = TryCatch(async (req, res, next) => {
     const { name, price, stock, category } = req.body;
@@ -23,6 +24,7 @@ export const newProduct = TryCatch(async (req, res, next) => {
         category: category.toLocaleLowerCase(),
         photo: photo.path,
     });
+    await invalidateCache({ product: true });
     return res.status(201).json({
         success: true,
         message: "Product Created Successfully",
@@ -117,6 +119,7 @@ export const updateProduct = TryCatch(async (req, res, next) => {
     if (category)
         product.category = category;
     await product.save();
+    await invalidateCache({ product: true });
     return res.status(201).json({
         success: true,
         message: "Product Updated Successfully",
@@ -131,6 +134,7 @@ export const deleteProduct = TryCatch(async (req, res, next) => {
         console.log("Product Photo Deleted");
     });
     await Product.deleteOne();
+    await invalidateCache({ product: true });
     return res.status(200).json({
         success: true,
         message: "Product deleted Successfully",

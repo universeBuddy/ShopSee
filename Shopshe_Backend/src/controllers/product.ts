@@ -10,6 +10,7 @@ import ErrorHandler from "../utility/utility-class.js";
 import { rm } from "fs";
 import { faker } from "@faker-js/faker";
 import { nodeCache } from "../app.js";
+import { invalidateCache } from "../utility/feature.js";
 
 // * Creating a funtion to  create New Product
 export const newProduct = TryCatch(
@@ -34,6 +35,8 @@ export const newProduct = TryCatch(
       category: category.toLocaleLowerCase(),
       photo: photo.path,
     });
+
+    await invalidateCache({ product: true });
 
     return res.status(201).json({
       success: true,
@@ -102,8 +105,7 @@ export const getSingleProduct = TryCatch(async (req, res, next) => {
   let product;
   const id = req.params.id;
   if (nodeCache.has(`product-${id}`)) {
-
-    product =JSON.parse(nodeCache.get(`product-${id}`) as string)
+    product = JSON.parse(nodeCache.get(`product-${id}`) as string);
   } else {
     product = await Product.findById(id);
 
@@ -141,6 +143,7 @@ export const updateProduct = TryCatch(async (req, res, next) => {
   if (category) product.category = category;
 
   await product.save();
+  await invalidateCache({product:true})
   return res.status(201).json({
     success: true,
     message: "Product Updated Successfully",
@@ -156,6 +159,7 @@ export const deleteProduct = TryCatch(async (req, res, next) => {
     console.log("Product Photo Deleted");
   });
   await Product.deleteOne();
+  await invalidateCache({product:true})
 
   return res.status(200).json({
     success: true,

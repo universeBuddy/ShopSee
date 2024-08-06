@@ -44,6 +44,6 @@ export interface BaseQuery {
 
 export type InvalidateCacheProps = {
   product?: boolean;
-  oreder?: boolean;
+  order?: boolean;
   admin?: boolean;
 };
