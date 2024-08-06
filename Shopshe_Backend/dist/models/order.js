@@ -20,12 +20,12 @@ const schema = new mongoose.Schema({
         pincode: {
             type: Number,
             required: true,
-        }
+        },
     },
     user: {
         type: String,
         ref: "User",
-        required: true
+        required: true,
     },
     subTotal: {
         type: Number,
@@ -38,10 +38,12 @@ const schema = new mongoose.Schema({
     shippingCharges: {
         type: Number,
         required: true,
+        default: 0,
     },
     discount: {
         type: Number,
         required: true,
+        default: 0,
     },
     total: {
         type: Number,
@@ -50,18 +52,20 @@ const schema = new mongoose.Schema({
     status: {
         type: Number,
         enum: ["Processing", "Shipped", "Delivered"],
-        default: ["Processing"]
+        default: ["Processing"],
     },
-    orderItem: [{
+    orderItem: [
+        {
             name: String,
             photo: String,
             price: Number,
             quantity: Number,
             productId: {
                 type: mongoose.Types.ObjectId,
-                ref: "Product"
-            }
-        }]
+                ref: "Product",
+            },
+        },
+    ],
 }, {
     timestamps: true,
 });
