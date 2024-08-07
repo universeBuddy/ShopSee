@@ -9,20 +9,28 @@ export const connectDB = (URI) => {
         .then((c) => console.log(`MongoDb Connected to ${c.connection.host}`))
         .catch((e) => console.log(e));
 };
-export const invalidateCache = async ({ product, order, admin, }) => {
+export const invalidateCache = async ({ product, order, admin, userId, orderId, productId, }) => {
     if (product) {
         const productKey = [
             "latest-product",
             "categories",
             "all-product",
         ];
-        const product = await Product.find({}).select("_id");
-        product.forEach(i => {
-            productKey.push(`product-${i._id}`);
-        });
+        if (typeof productId === "string") {
+            productKey.push(`product-${productId}`);
+        }
+        if (typeof productId === "object") {
+            productKey.forEach(i => productKey.push(`product-${productId}`));
+        }
         nodeCache.del(productKey);
     }
     if (order) {
+        const orderKeys = [
+            "all-orders",
+            `my-order-${userId}`,
+            `order-${orderId}`,
+        ];
+        nodeCache.del(orderKeys);
     }
     if (admin) {
     }
