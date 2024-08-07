@@ -20,7 +20,7 @@ const schema = new mongoose.Schema(
         type: String,
         required: true,
       },
-      pincode: {
+      pinCode: {
         type: Number,
         required: true,
       },
@@ -30,7 +30,7 @@ const schema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
-    subTotal: {
+    subtotal: {
       type: Number,
       required: true,
     },
@@ -53,9 +53,9 @@ const schema = new mongoose.Schema(
       required: true,
     },
     status: {
-      type: Number,
+      type: String,
       enum: ["Processing", "Shipped", "Delivered"],
-      default: ["Processing"],
+      default: "Processing",
     },
     orderItem: [
       {
@@ -64,7 +64,7 @@ const schema = new mongoose.Schema(
         price: Number,
         quantity: Number,
         productId: {
-          type: mongoose.Types.ObjectId,
+          type: mongoose.Types.ObjectId, 
           ref: "Product",
         },
       },

@@ -24,7 +24,6 @@ export const newOrder = TryCatch(
       !user ||
       !subtotal ||
       !tax ||
-     
       !total
     )
       return next(new ErrorHandler("Please Entee all Fields", 400));
