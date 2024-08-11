@@ -1,8 +1,23 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import Loader from "./components/loader";
 import Header from "./components/header";
 import { Toaster } from "react-hot-toast";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "./firebase";
+import { useDispatch } from "react-redux";
+import { userExist, userNotExist } from "./redux/reducer/userReducer";
+import { getUser } from "./redux/api/userAPI";
+
+
+
+
+
+
+
+
+
+
 
 const Home = lazy(() => import("./pages/home"));
 const Search = lazy(() => import("./pages/search"));
@@ -11,6 +26,10 @@ const Shipping = lazy(() => import("./pages/shipping"));
 const Login = lazy(() => import("./pages/login"));
 const Orders = lazy(() => import("./pages/orders"));
 const OrderDetails = lazy(() => import("./pages/order-details"));
+
+
+
+
 
 // Admin imports
 const Dashboard = lazy(() => import("./pages/admin/dashboard"));
@@ -31,7 +50,33 @@ const TransactionManagement = lazy(
   () => import("./pages/admin/management/transactionmanagement")
 );
 
+
+
+
+
+
 const App = () => {
+
+
+const dispatch  =useDispatch()
+useEffect(() => {
+
+  onAuthStateChanged(auth,async(user)=>{
+    if(user){
+      const data = await getUser(user.uid)
+      console.log("Logged In")
+      dispatch(userExist(data.user))
+    }
+    else{
+      dispatch(userNotExist())
+    }
+  } )
+
+}, [])
+
+
+
+
   return (
     <Router>
       {/* //! {Header} */}
