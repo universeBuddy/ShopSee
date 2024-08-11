@@ -56,7 +56,7 @@ export const deleteUser = TryCatch(async (req, res, next) => {
     const id = req.params.id;
     const user = await User.findById(id);
     if (!user) {
-        return next(new ErrorHandler("Invald ID", 400));
+        return next(new ErrorHandler("Invalid ID", 400));
     }
     await user.deleteOne();
     return res.status(200).json({

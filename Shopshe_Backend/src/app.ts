@@ -5,13 +5,20 @@ import { error } from "console";
 import { errorMiddleWare } from "./middlewares/error.js";
 import NodeCache from "node-cache";
 import morgan from "morgan";
-
+import Stripe from "stripe";
+import Razorpay from "razorpay";
 
 
 
 import userRoute from "./routes/user.js";
 import productRoute from "./routes/product.js"
 import orderRoute from "./routes/orders.js"
+import paymentRoute from "./routes/payment.js"  
+import dashboardRoute from "./routes/statistics.js"  
+
+
+
+
 
 
 // & DOTENV=
@@ -23,6 +30,9 @@ console.log(process.env.PORT);
 
 const port = process.env.PORT;
 const mongo_uri  =  process.env.MONGO_URI || "";
+const stripeKey = process.env.STRIPE_KEY || "";
+const key_id= process.env.KEY_ID || "";
+ const key_secret=process.env. KEY_SECRET || "";
 
 connectDB(mongo_uri);
 const app = express();
@@ -31,6 +41,12 @@ const app = express();
 // * implement the node cache
 export const nodeCache = new NodeCache();
 
+// * stripe payment gateway
+//  export const stripe = new Stripe(stripeKey); 
+export const paymentIntent = new Razorpay({
+  key_id: process.env.KEY_ID || "",
+   key_secret:process.env. KEY_SECRET || "",
+});
 
 // * middleware use for json
 app.use(express.json());
@@ -48,6 +64,8 @@ app.get("/", (req, res) => {
 app.use("/api/v1/user",userRoute);
 app.use("/api/v1/product",productRoute);
 app.use("/api/v1/order",orderRoute);
+app.use("/api/v1/payment",paymentRoute);
+app.use("/api/v1/dashboard",dashboardRoute);
 
 
 app.use("/upload",express.static("upload"))
