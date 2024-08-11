@@ -9,10 +9,10 @@ import { FetchBaseQueryError } from "@reduxjs/toolkit/query/react";
 import { MessageResponse } from "../types/api-types";
 
 const Login = () => {
-  const [gender, setGender] = useState("");
+  const [gender, setGender] = useState(""); 
   const [date, setDate] = useState("");
 
-  const { login } = useLoginMutation();
+  const  [login]  = useLoginMutation();
 
   const loginHandler = async () => {
     try {
@@ -21,23 +21,24 @@ const Login = () => {
       const { user } = await signInWithPopup(auth, provider);
 
       const res = await login({
-        name: "Adi",
-        email: "adtyara4444@gmal.com",
-        photo: "photo",
+        name: user.displayName!,
+        email: user.email!,
+        photo: user.photoURL!,
         gender,
         role: "user",
         dob: date,
-        _id: "sampleid",
+        _id: user.uid,
       });
-      console.log(user);
+   
 
       if ("data" in res) {
-        toast.success(res.data.message);
+        toast.success("LogIn Successfully🎉");
       } else {
         const error = res.error as FetchBaseQueryError;
         const message = (error.data as MessageResponse).message;
         toast.error(message);
       }
+      console.log(user);
     } catch (error) {
       toast.error("Sign In Falid ");
     }

@@ -11,5 +11,5 @@ export const store = configureStore({
   
 
 
-middleware: (mid) =>[...mid(), userAPI.middleware]
+// middleware: (mid) =>[...mid(), userAPI.middleware]
 });
