@@ -5,19 +5,10 @@ import Header from "./components/header";
 import { Toaster } from "react-hot-toast";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "./firebase";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { userExist, userNotExist } from "./redux/reducer/userReducer";
 import { getUser } from "./redux/api/userAPI";
-
-
-
-
-
-
-
-
-
-
+import { UserReducerInitialState } from "./types/rediucer-types";
 
 const Home = lazy(() => import("./pages/home"));
 const Search = lazy(() => import("./pages/search"));
@@ -26,10 +17,6 @@ const Shipping = lazy(() => import("./pages/shipping"));
 const Login = lazy(() => import("./pages/login"));
 const Orders = lazy(() => import("./pages/orders"));
 const OrderDetails = lazy(() => import("./pages/order-details"));
-
-
-
-
 
 // Admin imports
 const Dashboard = lazy(() => import("./pages/admin/dashboard"));
@@ -50,39 +37,32 @@ const TransactionManagement = lazy(
   () => import("./pages/admin/management/transactionmanagement")
 );
 
-
-
-
-
-
 const App = () => {
+  const { user,loading} = useSelector(
+    (state: { userReducer: UserReducerInitialState }) => state.userReducer
+  );
 
-
-const dispatch  =useDispatch()
-useEffect(() => {
-
-  onAuthStateChanged(auth,async(user)=>{
-    if(user){
-      const data = await getUser(user.uid)
-      console.log("Logged In")
-      console.log(data)
-      dispatch(userExist(data.user)) 
-    }
-    else{
-      dispatch(userNotExist())
-    }
+  const dispatch = useDispatch();
+  useEffect(() => {
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        console.log("Logged In");
+        const data = await getUser(user.uid);
+        // console.log(data)
+        dispatch(userExist(data.user));
+      } else {
+        dispatch(userNotExist());
+        console.log(" NotLogged In");
+      }
+    });
   });
 
-})
-
-
-
-
-  return (
+  return loading ? <Loader /> :
+  (
     <Router>
       {/* //! {Header} */}
 
-      <Header />
+      <Header user={user} />
 
       <Suspense fallback={<Loader />}>
         <Routes>
