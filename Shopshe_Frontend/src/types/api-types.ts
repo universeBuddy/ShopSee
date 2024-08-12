@@ -1,4 +1,4 @@
-import { User } from "./types";
+import { Producut, User } from "./types";
 
 export type MessageResponse = {
   success: boolean;
@@ -9,3 +9,9 @@ export type UserResponse = {
   success: boolean;
   user: User;
 };
+
+export type AllProductsResponse = {
+  success: boolean;
+  product: Producut[];
+};
+

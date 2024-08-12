@@ -2,6 +2,9 @@ import { useState } from "react";
 import { FaSearch, FaShoppingBag, FaSignInAlt, FaSignOutAlt, FaUser } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { User } from "../types/types";
+import { signOut } from "firebase/auth";
+import { auth } from "../firebase";
+import toast from "react-hot-toast";
 
 
 
@@ -15,9 +18,18 @@ const Header = ({user}:PropsType) => {
 
   const [ isOpen , setIsOpen] = useState<boolean>(false);
 
-  const logoutHandle = ()=>{
+  const logoutHandle =async ()=>{
    
+   try {
+    await signOut(auth);
+
+
+    toast.success("SignOut Successfully ✔")
     setIsOpen(false); 
+   } catch (error) {
+    toast.error("SignOut Faild ❌")
+    
+   }
   }
   return (
     <nav className="header">

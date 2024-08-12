@@ -1,4 +1,5 @@
 import { FaPlus } from "react-icons/fa";
+import { server } from "../redux/store";
 // this is the comment
 type ProductProps = {
   productId: string;
@@ -16,12 +17,12 @@ const ProductCard = ({
   stock,
   handlder,
 }: ProductProps) => {
-  const server = "dummyServer";
+ 
 
-  return (
+  return ( 
     <>
       <div className="product-card">
-        <img src={photo} alt={name} />
+        <img src={`${server}/${photo}`} alt={name} />
         <p>{name}</p>
         <span> ₹ {price}</span>
 

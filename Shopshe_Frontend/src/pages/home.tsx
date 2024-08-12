@@ -1,10 +1,16 @@
 import { Link } from "react-router-dom";
 import ProductCard from "../components/product-cart";
+import { useLatestProductsQuery } from "../redux/api/productAPI";
+import toast from "react-hot-toast";
+import Loader from "../components/loader";
 
 const Home = () => {
+  const { data, isLoading, isError } = useLatestProductsQuery("");
 
-  const addToCartHandler =()=>{
+  const addToCartHandler = () => {};
 
+  if (isError) {
+    toast.error("Cannot Fetch the error");
   }
   return (
     <div className="home">
@@ -18,10 +24,21 @@ const Home = () => {
       </h1>
 
       <main>
-        <ProductCard productId="afdfdaf" name="macbook" price={200} stock ={10}  handlder={addToCartHandler} photo="https://m.media-amazon.com/images/I/71jG+e7roXL._SX679_.jpg" />
-        <ProductCard productId="afdfdaf" name="macbook" price={200} stock ={10}  handlder={addToCartHandler} photo="https://m.media-amazon.com/images/I/61ZEQXGTepL._SX679_.jpg" />
-        <ProductCard productId="afdfdaf" name="macbook" price={200} stock ={10}  handlder={addToCartHandler} photo="https://m.media-amazon.com/images/I/71jG+e7roXL._SX679_.jpg" />
-
+        {isLoading ? (
+          <Loader />
+        ) : (
+          data?.product.map((i) => (
+            <ProductCard
+              key={i._id}
+              productId={i._id}
+              name={i.name}
+              price={i.price}
+              stock={i.stock}
+              handlder={addToCartHandler}
+              photo={i.photo}
+            />
+          ))
+        )}
       </main>
     </div>
   );
