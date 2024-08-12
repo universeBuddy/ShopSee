@@ -9,7 +9,7 @@ const initialState: UserReducerInitialState = {
 
 export const userReducer = createSlice({
   name: "userReducer",
-  initialState,
+  initialState, 
   reducers: {
     userExist: (state, action: PayloadAction<User>) => {
       state.loading = false;

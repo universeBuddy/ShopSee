@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-catch */
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { MessageResponse, UserResponse } from "../../types/api-types";
 import { User } from "../../types/types";
@@ -20,15 +21,17 @@ export const userAPI = createApi({
 });
 
 export const getUser = async (id: string) => {
-  try {
+  try{
     const { data }: { data: UserResponse } = await axios.get(
       `${import.meta.env.VITE_SERVER}/api/v1/user/${id}`
     );
-
+    console.log(data)
     return data;
-  } catch (error) {
+  }
+  catch(error){
     throw error;
   }
+
 };
 
 export const { useLoginMutation } = userAPI;

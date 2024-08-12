@@ -65,14 +65,15 @@ useEffect(() => {
     if(user){
       const data = await getUser(user.uid)
       console.log("Logged In")
-      dispatch(userExist(data.user))
+      console.log(data)
+      dispatch(userExist(data.user)) 
     }
     else{
       dispatch(userNotExist())
     }
-  } )
+  });
 
-}, [])
+})
 
 
 
