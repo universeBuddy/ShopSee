@@ -9,7 +9,7 @@
  }
 
  
-export interface Producut {
+export interface Product {
   
    name:string,
    price:number,

@@ -1,4 +1,4 @@
-import { Producut, User } from "./types";
+import { Product, User } from "./types";
 
 export type CustomError = {
   staus: number;
@@ -20,7 +20,7 @@ export type UserResponse = {
 
 export type AllProductsResponse = {
   success: boolean;
-  product: Producut[];
+  product: Product[];
 };
 export type CategoriesResponse = {
   success: boolean;
@@ -28,7 +28,19 @@ export type CategoriesResponse = {
 };
 
 
-export type CategoriesResponse = {
+export type SearchProductResponse = {
   success: boolean;
-  categories: string[];
+  product: Product[],
+  totalPage:number;
+};
+export type SearchProductRequest = {
+  price: number,
+  page: number,
+  category: string,
+  search: string,
+  sort: string,
+};
+export type NewProuctRequest = {
+  id: string,
+ formData:FormData;
 };
