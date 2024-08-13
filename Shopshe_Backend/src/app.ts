@@ -7,6 +7,7 @@ import NodeCache from "node-cache";
 import morgan from "morgan";
 import Stripe from "stripe";
 import Razorpay from "razorpay";
+import cors from "cors"
 
 
 
@@ -53,6 +54,7 @@ app.use(express.json());
 
 // ! morgen used for moniter the requests
 app.use(morgan("dev"))
+app.use(cors())
 
  
 app.get("/", (req, res) => {

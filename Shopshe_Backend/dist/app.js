@@ -5,6 +5,7 @@ import { errorMiddleWare } from "./middlewares/error.js";
 import NodeCache from "node-cache";
 import morgan from "morgan";
 import Razorpay from "razorpay";
+import cors from "cors";
 import userRoute from "./routes/user.js";
 import productRoute from "./routes/product.js";
 import orderRoute from "./routes/orders.js";
@@ -34,6 +35,7 @@ export const paymentIntent = new Razorpay({
 app.use(express.json());
 // ! morgen used for moniter the requests
 app.use(morgan("dev"));
+app.use(cors());
 app.get("/", (req, res) => {
     res.status(200).send("API Working");
 });

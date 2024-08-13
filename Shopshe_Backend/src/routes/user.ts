@@ -14,7 +14,7 @@ app.post("/new",newUser);
 app.get("/all",adminOnly, getAllUsers);
 
 // * Get a single user 
-app.get("/:id",adminOnly,getUsers);
+app.get("/:id",getUsers);
 
 // * Delete User Route
 app.delete("/:id",adminOnly,deleteUser);

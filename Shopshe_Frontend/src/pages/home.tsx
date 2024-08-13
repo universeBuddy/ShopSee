@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import ProductCard from "../components/product-cart";
 import { useLatestProductsQuery } from "../redux/api/productAPI";
 import toast from "react-hot-toast";
-import Loader from "../components/loader";
+import Loader, { Skeleton } from "../components/loader";
 
 const Home = () => {
   const { data, isLoading, isError } = useLatestProductsQuery("");
@@ -19,13 +19,14 @@ const Home = () => {
       <h1>
         Latest Product
         <Link to="/search" className="findmore">
-          MOre{" "}
+          More{" "}
         </Link>
       </h1>
 
+        
       <main>
         {isLoading ? (
-          <Loader />
+          <Skeleton  width="80vw"/>
         ) : (
           data?.product.map((i) => (
             <ProductCard
