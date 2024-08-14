@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { VscError } from "react-icons/vsc";
 import CartItem from "./cart-item";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { CartReducerInitialState } from "../types/rediucer-types";
 
 const cartItem = [
   {
@@ -19,6 +21,12 @@ const discount = 400;
 const total = subtotal + tax + shippingCharges;
 
 const Cart = () => {
+
+
+  const {cartItems,subtotal,tax, total,} = useSelector(
+    (state: { cartReducer: CartReducerInitialState }) => state.cartReducer
+  );
+
   const [couponCode, setCouponCode] = useState<string>("");
   const [isValidCouponCode, setIsValidCouponCode] = useState<boolean>(false);
 
