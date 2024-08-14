@@ -44,3 +44,18 @@ export type NewProuctRequest = {
   id: string,
  formData:FormData;
 };
+export type UpdateProuctRequest = {
+  userId: string,
+  productId: string,
+ formData:FormData;
+};
+export type DeleteProuctRequest = {
+  userId: string,
+  productId: string,
+
+};
+
+export type ProductResponse = {
+  id: string,
+product: Product;
+};
