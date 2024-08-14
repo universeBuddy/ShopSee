@@ -1,11 +1,11 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { CartReducerInitialState } from "../../types/rediucer-types";
 import { actions } from "react-table";
-import { CartItems } from "../../types/types";
+import { CartItem } from "../../types/types";
 
 const initialState: CartReducerInitialState = {
   loading: false,
-  cartItems: [],
+  cartItem: [],
   subtotal: 0,
   tax: 0,
   shippingCharges: 0,
@@ -24,14 +24,18 @@ export const cartReducer = createSlice({
   name: "cartReducer",
   initialState,
   reducers: {
-    addtoCart: (state, action: PayloadAction<CartItems>) => {
+    addtoCart: (state, action: PayloadAction<CartItem>) => {
       state.loading = true;
-      state.cartItems.push(action.payload);
+
+      const index = state.cartItem.findIndex(i=> i.productId === action.payload.productId);
+
+      if(index !== -1) state.cartItem[index] =action.payload;
+      else state.cartItem.push(action.payload)
       state.loading = false;
     },
     removeCartItem: (state, action: PayloadAction<string>) => {
       state.loading = true;
-      state.cartItems = state.cartItems.filter((i) => i.productId !== action.payload)
+      state.cartItem = state.cartItem.filter((i) => i.productId !== action.payload)
       state.loading = false;
     },
   },

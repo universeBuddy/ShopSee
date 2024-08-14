@@ -23,7 +23,7 @@ export type ShippingInfo = {
   country: string;
   pinCode: string;
 };
-export type CartItems = {
+export type CartItem = {
   productId: string;
   photo: string;
   name: string;

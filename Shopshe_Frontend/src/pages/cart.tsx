@@ -1,34 +1,34 @@
 import { useEffect, useState } from "react";
 import { VscError } from "react-icons/vsc";
-import CartItem from "./cart-item";
+import CartItemCard from "../pages/cart-item";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { CartReducerInitialState } from "../types/rediucer-types";
+import { CartItem } from "../types/types";
+import { addtoCart } from "../redux/reducer/cartReducer";
 
-const cartItem = [
-  {
-    productId: "fdfsfsdff",
-    photo: "https://m.media-amazon.com/images/I/71jG+e7roXL._SX679_.jpg",
-    name: "MacBook",
-    quantity: 4,
-    stock: 10,
-  },
-];
-const subtotal = 4000;
-const tax = Math.round(subtotal * 0.18);
-const shippingCharges = 200;
-const discount = 400;
-const total = subtotal + tax + shippingCharges;
+
 
 const Cart = () => {
 
 
-  const {cartItems,subtotal,tax, total,} = useSelector(
+  const {cartItem,subtotal,tax, total,shippingCharges,discount} = useSelector(
     (state: { cartReducer: CartReducerInitialState }) => state.cartReducer
   );
 
+
+  const dispatch = useDispatch();
   const [couponCode, setCouponCode] = useState<string>("");
   const [isValidCouponCode, setIsValidCouponCode] = useState<boolean>(false);
+
+
+
+  const addToCartHandler = (cartItem: CartItem) => {
+    if (cartItem.stock < 1)
+
+    dispatch(addtoCart({...cartItem,quantity:cartItem.quantity+1}))
+  }; 
+
 
   useEffect(() => {
     const timeOutId = setTimeout(() => {
@@ -46,7 +46,7 @@ const Cart = () => {
       {/* main section */}
       <main>
         {cartItem.length > 0 ? (
-          cartItem.map((i, idx) => <CartItem key={idx} cartItem={i} />)
+          cartItem.map((i, idx) => <CartItemCard key={idx} cartItem={i} />)
         ) : (
           <h1> No Item Added</h1>
         )}
