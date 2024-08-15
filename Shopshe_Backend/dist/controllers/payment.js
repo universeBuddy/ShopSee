@@ -1,7 +1,7 @@
+import { paymentIntent } from "../app.js";
 import { TryCatch } from "../middlewares/error.js";
 import { Coupon } from "../models/coupon.js";
 import ErrorHandler from "../utility/utility-class.js";
-import { paymentIntent } from "../app.js";
 // * creating a new payment
 export const createPayment = TryCatch(async (req, res, next) => {
     const { amount } = req.body;
@@ -33,7 +33,7 @@ export const createCoupon = TryCatch(async (req, res, next) => {
 });
 // * creating a discount
 export const applyDiscount = TryCatch(async (req, res, next) => {
-    const { coupon } = req.body;
+    const { coupon } = req.query;
     const discount = await Coupon.findOne({ code: coupon });
     if (!discount) {
         return next(new ErrorHandler("Invalid Coupon code", 400));
