@@ -1,11 +1,17 @@
 import { useEffect, useState } from "react";
 import { VscError } from "react-icons/vsc";
-import CartItemCard from "../pages/cart-item";
-import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import CartItemCard from "../pages/cart-item";
+import {
+  addtoCart,
+  calculatePrice,
+  removeCartItem,
+} from "../redux/reducer/cartReducer";
 import { CartReducerInitialState } from "../types/rediucer-types";
 import { CartItem } from "../types/types";
-import { addtoCart, removeCartItem } from "../redux/reducer/cartReducer";
+import axios from "axios";
+import { server } from "../redux/store";
 
 const Cart = () => {
   const { cartItem, subtotal, tax, total, shippingCharges, discount } =
@@ -18,14 +24,12 @@ const Cart = () => {
   const [isValidCouponCode, setIsValidCouponCode] = useState<boolean>(false);
 
   const incrementHandler = (cartItem: CartItem) => {
-   
-
-    if(cartItem.quantity >=  cartItem.stock) return;
-      dispatch(addtoCart({ ...cartItem, quantity: cartItem.quantity + 1 }));
+    if (cartItem.quantity >= cartItem.stock) return;
+    dispatch(addtoCart({ ...cartItem, quantity: cartItem.quantity + 1 }));
   };
   const decrementHandler = (cartItem: CartItem) => {
-    if(cartItem.quantity <=   1)  return;
-      dispatch(addtoCart({ ...cartItem, quantity: cartItem.quantity - 1 })); 
+    if (cartItem.quantity <= 1) return;
+    dispatch(addtoCart({ ...cartItem, quantity: cartItem.quantity - 1 }));
   };
   const removeHandler = (productId: string) => {
     dispatch(removeCartItem(productId));
@@ -33,14 +37,26 @@ const Cart = () => {
 
   useEffect(() => {
     const timeOutId = setTimeout(() => {
-      if (Math.random() > 0.5) setIsValidCouponCode(true);
-      else setIsValidCouponCode(false);
+      axios
+        .get(`${server}/api/v1/payment/discount?coupon=${couponCode}`)
+        .then((res) => {
+          console.log(res.data);
+          setIsValidCouponCode(true);
+        })
+        .catch((e) => {
+          console.log(e.response.data.message);
+          setIsValidCouponCode(false);
+        });
     }, 1000);
     return () => {
       clearTimeout(timeOutId);
       setIsValidCouponCode(false);
     };
   }, [couponCode]);
+
+  useEffect(() => {
+    dispatch(calculatePrice());
+  }, [cartItem]);
 
   return (
     <div className="cart">
@@ -50,7 +66,6 @@ const Cart = () => {
           cartItem.map((i, idx) => (
             <CartItemCard
               incrementHandler={incrementHandler}
-  
               decrementHandler={decrementHandler}
               removeHandler={removeHandler}
               key={idx}

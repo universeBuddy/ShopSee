@@ -11,11 +11,12 @@ const Home = () => {
   const { data, isLoading, isError } = useLatestProductsQuery("");
 
   const dispatch = useDispatch();
+  
   const addToCartHandler = (cartItem: CartItem) => {
     if (cartItem.stock < 1) return toast.error("Out of Stock");
 
     dispatch(addtoCart(cartItem));
-   toast.success("Added to cart")
+    toast.success("Added to cart");
   };
 
   if (isError) {

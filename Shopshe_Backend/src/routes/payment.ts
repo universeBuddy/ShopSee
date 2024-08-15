@@ -19,7 +19,7 @@ app.get("/discount", applyDiscount);
 app.post("/coupon/new",adminOnly, createCoupon);
 
 // * geet all coupon
-app.get("/coupon/all", adminOnly,allCoupons);
+app.get("/coupon/all", allCoupons);
 
 // * delete coupon
 app.delete("/coupon/:id", adminOnly,deleteCoupon);

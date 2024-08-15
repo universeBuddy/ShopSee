@@ -60,4 +60,4 @@ export const cartReducer = createSlice({
   },
 });
 
-export const { addtoCart, removeCartItem } = cartReducer.actions;
+export const { addtoCart, removeCartItem,calculatePrice } = cartReducer.actions;
