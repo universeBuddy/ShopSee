@@ -5,13 +5,13 @@ import { CartItem } from "../types/types";
 
 
 type CartItemProps = {
-  cartItem: any;
-   incrementHandler: (CartItem:CartItem) =>void
+  cartItem: CartItem;
+   incrementHandler: (cartItem:CartItem) =>void
   decrementHandler: (cartItem:CartItem)  =>void
   removeHandler: (id:string)  =>void
 }
 
-const CartItem = ({ cartItem,incrementHandler,decrementHandler,removeHandler}:CartItemProps) => {
+const CartItems = ({ cartItem,incrementHandler,decrementHandler,removeHandler}:CartItemProps) => {
   //
 
   const { photo, productId, name, price, quantity } = cartItem;
@@ -20,7 +20,7 @@ const CartItem = ({ cartItem,incrementHandler,decrementHandler,removeHandler}:Ca
       <img src={`${server}/${photo}`} alt="Product" />
       <article>
         <Link to={`/product/${productId}`}>{name}</Link>
-        <span> Rs 3000{price}</span>
+        <span> {price}</span>
       </article>
 
       <div>
@@ -37,4 +37,4 @@ const CartItem = ({ cartItem,incrementHandler,decrementHandler,removeHandler}:Ca
   );
 };
 
-export default CartItem;
+export default CartItems;

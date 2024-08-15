@@ -5,30 +5,31 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { CartReducerInitialState } from "../types/rediucer-types";
 import { CartItem } from "../types/types";
-import { addtoCart } from "../redux/reducer/cartReducer";
-
-
+import { addtoCart, removeCartItem } from "../redux/reducer/cartReducer";
 
 const Cart = () => {
-
-
-  const {cartItem,subtotal,tax, total,shippingCharges,discount} = useSelector(
-    (state: { cartReducer: CartReducerInitialState }) => state.cartReducer
-  );
-
+  const { cartItem, subtotal, tax, total, shippingCharges, discount } =
+    useSelector(
+      (state: { cartReducer: CartReducerInitialState }) => state.cartReducer
+    );
 
   const dispatch = useDispatch();
   const [couponCode, setCouponCode] = useState<string>("");
   const [isValidCouponCode, setIsValidCouponCode] = useState<boolean>(false);
 
+  const incrementHandler = (cartItem: CartItem) => {
+   
 
-
-  const addToCartHandler = (cartItem: CartItem) => {
-    if (cartItem.stock < 1)
-
-    dispatch(addtoCart({...cartItem,quantity:cartItem.quantity+1}))
-  }; 
-
+    if(cartItem.quantity >=  cartItem.stock) return;
+      dispatch(addtoCart({ ...cartItem, quantity: cartItem.quantity + 1 }));
+  };
+  const decrementHandler = (cartItem: CartItem) => {
+    if(cartItem.quantity <=   1)  return;
+      dispatch(addtoCart({ ...cartItem, quantity: cartItem.quantity - 1 })); 
+  };
+  const removeHandler = (productId: string) => {
+    dispatch(removeCartItem(productId));
+  };
 
   useEffect(() => {
     const timeOutId = setTimeout(() => {
@@ -46,7 +47,16 @@ const Cart = () => {
       {/* main section */}
       <main>
         {cartItem.length > 0 ? (
-          cartItem.map((i, idx) => <CartItemCard key={idx} cartItem={i} />)
+          cartItem.map((i, idx) => (
+            <CartItemCard
+              incrementHandler={incrementHandler}
+  
+              decrementHandler={decrementHandler}
+              removeHandler={removeHandler}
+              key={idx}
+              cartItem={i}
+            />
+          ))
         ) : (
           <h1> No Item Added</h1>
         )}
