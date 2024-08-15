@@ -5,9 +5,10 @@ import { Column } from "react-table";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { UserReducerInitialState } from "../types/rediucer-types";
-import { useAllOrdersQuery, useMyOrdersQuery } from "../redux/api/orderAPI";
+import { useMyOrdersQuery } from "../redux/api/orderAPI";
 import toast from "react-hot-toast";
 import { CustomError } from "../types/api-types";
+import { Skeleton } from "../components/loader";
 type DataType = {
   _id: string;
   amount: number;
@@ -47,7 +48,7 @@ const column: Column<DataType>[] = [
 
 const Orders = () => {
   const { user } = useSelector(
-    (state: { useReducer: UserReducerInitialState }) => state.useReducer
+    (state: { userReducer: UserReducerInitialState }) => state.userReducer
   );
   const [rows,setRows] = useState<DataType[]>([]);
   const { isLoading, data, isError, error } = useMyOrdersQuery(user?._id!);
@@ -60,7 +61,7 @@ const Orders = () => {
     if (data) {
       setRows(
         data.orders.map((i) => ({
-          user: i.user.name,
+          _id: i._id,
           amount: i.total,
           discount: i.discount,
           quantity: i.orderItems.length,
@@ -95,7 +96,8 @@ const Orders = () => {
   return (
     <div className="container">
       <h1>My orders</h1>
-      {Table}
+      {isLoading ? <Skeleton  /> :Table}
+    
     </div>
   );
 };

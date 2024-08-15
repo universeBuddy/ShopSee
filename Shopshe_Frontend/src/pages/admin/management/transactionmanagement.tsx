@@ -1,30 +1,40 @@
 import { FaTrash } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
 import AdminSidebar from "../../../components/admin/AdminSidebar";
-import { OrderItem } from "../../../models/types";
+
 import { server } from "../../../redux/store";
+import { useState } from "react";
+import { OrderItem } from "../../../types/types";
+import { useSelector } from "react-redux";
+import { UserReducerInitialState } from "../../../types/rediucer-types";
+import { useOrdersDetailsQuery } from "../../../redux/api/orderAPI";
+
+
+const orderItems : any[] = [];
 
 const img =
   "https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8c2hvZXN8ZW58MHx8MHx8&w=1000&q=804";
 
-const orderItems: OrderItem[] = [
-  {
-    name: "Puma Shoes",
-    photo: img,
-    id: "asdsaasdas",
-    quantity: 4,
-    price: 2000,
-  },
-];
+
 
 const TransactionManagement = () => {
+
+  const { user } = useSelector(
+    (state: { userReducer: UserReducerInitialState }) => state.userReducer
+  );
+
+  const params = useParams();
+  const navigate = useNavigate();
+
+  const { isLoading, data, isError,  } = useOrdersDetailsQuery(params.id!);
+
+const {} = data?.orders
+
+
+
   const [order, setOrder] = useState({
     name: "Puma Shoes",
-    address: "77 black street",
-    city: "Neyword",
-    state: "Nevada",
-    country: "US",
-    pinCode: 242433,
+   
     status: "Processing",
     subtotal: 4000,
     discount: 1200,
@@ -49,13 +59,17 @@ const TransactionManagement = () => {
     status,
   } = order;
 
-  const updateHandler = (): void => {
-    setOrder((prev) => ({
-      ...prev,
-      status: "Shipped",
-    }));
-  };
 
+ 
+  const updateHandler = ()=> {
+  }
+
+
+  const  deleteHandler =()=>{
+
+
+    if(isError) return <Navigate to={"/404"} />
+  }
   return (
     <div className="admin-container">
       <AdminSidebar />
@@ -69,7 +83,7 @@ const TransactionManagement = () => {
 
           {orderItems.map((i) => (
             <ProductCard
-              key={i._id}
+              key={i._id} 
               name={i.name}
               photo={`${server}/${i.photo}`}
               productId={i.productId}
