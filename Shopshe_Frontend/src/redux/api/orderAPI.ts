@@ -18,22 +18,34 @@ export const orderApi = createApi({
       invalidatesTags: ["orders"],
     }),
     updateOrder: builder.mutation<MessageResponse, UpdateOrderRequest>({
-      query: ({userId,orderId}) => ({ url: "new", method: "POST", body: order }),
+      query: ({ userId, orderId }) => ({
+        url: `${orderId}?id=${userId}`,
+
+        method: "PUT",
+      }),
       invalidatesTags: ["orders"],
     }),
-    myOrders: builder.mutation<AllOrdersResponse, string>({
+    deleteOrder: builder.mutation<MessageResponse, UpdateOrderRequest>({
+      query: ({ userId, orderId }) => ({
+        url: `${orderId}?id=${userId}`,
+
+        method: "DELETE",
+      }),
+      invalidatesTags: ["orders"],
+    }),
+    myOrders: builder.query<AllOrdersResponse, string>({
       query: (id) => `my?id=${id}`,
       providesTags: ["orders"],
     }),
-    allOrders: builder.mutation<AllOrdersResponse, string>({
+    allOrders: builder.query<AllOrdersResponse, string>({
       query: (id) => `all?id=${id}`,
       providesTags: ["orders"],
     }),
-    ordersDetails: builder.mutation<AllOrdersResponse, string>({
+    ordersDetails: builder.query<AllOrdersResponse, string>({
       query: (id) => id,
       providesTags: ["orders"],
     }),
   }),
 });
 
-export const { useNewOrderMutation } = orderApi;
+export const { useNewOrderMutation ,useUpdateOrderMutation,useDeleteOrderMutation,useMyOrdersQuery,useAllOrdersQuery,useOrdersDetailsQuery} = orderApi;
